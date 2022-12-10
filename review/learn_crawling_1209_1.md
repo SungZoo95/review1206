@@ -182,3 +182,32 @@ for item in find_all_li:
 css_soup = soup.select("div#NM_FAVORITE > div.group_nav > ul.list_nav.type_fix")
 ```
 *나의 해설 : 꺽쇠로 파일 경로를 표현한 모습이다.
+# BeautifulSoup
+- HTML에서 원하는 부분 추출하는 라이브러리
+- requests는 HTML을 텍스트로 출력할 뿐이지 실제 HTML 태그를 다루지는 않는다.
+- Beautifulsoup 라이브러리는 위의 결과를 HTML코드로 출력해준다.
+
+## BeautifulSoup
+- BeautifulSoup()
+    - 문자열 HTMl코드를 실제 HTML 코드로 변환하는 함수
+```py
+BeautifulSoup(문자열, 'html.parser')
+# 문자열을 HTML 코드로 해석해서 읽어라
+```
+- find_all()
+    - HTML 코드에서 우리가 원하는 부분을 모두 가져오는 함수
+    - 원하는 부분을 지정할 때 사용하는 것은 태그와  Selector
+    - 해당 태그의 모든 HTML 코드를 리스트 형태로 반환
+- find()
+    - 하나의 부분만 가져오는 함수
+# URL 패턴
+- url 패턴 : query="검색값"&page="페이지값" 
+
+```py
+query = input("검색어를 입력하세요 : ")
+naver_url = f"https://search.naver.com/search.naver?query={query}&nso=&where=blog&sm=tab_opt"
+naver_raw = requests.get(naver_url, verify=False)
+naver_bs = BeautifulSoup(naver_raw.text, "html.parser")
+for i in naver_bs.find_all("div", {"class":"total_area"}):
+    print(i.find("a", {"class":"api_txt_lines total_tit"}).text)
+```
