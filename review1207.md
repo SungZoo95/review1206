@@ -265,4 +265,77 @@ plt.legend(loc = "best")
 #### 범례 표기 
 - plt.legend()
 - loc='best' : 범례 위치 지정. 기본값은 auto 
-- 
+
+### 눈금과 라벨 
+
+1. 객체의 메서드 활용
+
+- set_xticks() 함수 : 눈금지정 (x축의 값 한 칸 한 칸의 길이를 정하는거라고 생각)
+- set_xticklabels() 함수 : 눈금 라벨 지정 (위에서 지정한 칸의 이름을 정함)
+- set_title() 함수 : 그래프의 타이틀 지정 
+- set_xlabel() 함수 : xticklabels의 함수 밑에 총 제목을 지정함
+
+2. pyplot 모듈 함수의 활용 
+- plt.xticks() 함수 : 눈금 및 라벨 지정 (set_xticks(),set_xticklabels()함수를 동시에 포함한다.)
+- plt.title() 함수 : 그래프 타이틀 지정 (set_title()함수와 동일하다.)
+- plt.xlabel() 함수 : x축 이름 지정 (set_xlabel()과 동일합니다.)
+* rotation 함수는 외워두기 밑 xticks의 각도를 조절 가능하게 해준다 ex) rotaion = 45
+
+### 서브 플롯에 주석 및 도형 추가하기 
+
+```python
+#설명을 위해 S&P 500 (스탠다드 앤 푸어스, Standard and Poor's 500)의 미국 500대 기업을 포함한 주식시장지수 데이터로 그래프를 생성하고 2007-2008년 사이에 있었던 재정위기와 관련된 중요한 날짜를 주석으로 추가한다.)
+spx_path = "https://raw.githubusercontent.com/myoh0623/dataset/main/spx.csv"
+data = pd.read_csv(spx_path)
+data
+0	1990-02-01 00:00:00	328.79
+1	1990-02-02 00:00:00	330.92
+2	1990-02-05 00:00:00	331.85
+3	1990-02-06 00:00:00	329.66
+4	1990-02-07 00:00:00	333.75
+...	...	...
+5467	2011-10-10 00:00:00	1194.89
+5468	2011-10-11 00:00:00	1195.54
+5469	2011-10-12 00:00:00	1207.25
+5470	2011-10-13 00:00:00	1203.66
+5471	2011-10-14 00:00:00	1224.58
+
+# 시간 컬럼을 행의 인덱스로 사용하자
+#index_col=0: 0번 열(column)을 인덱스로 사용
+#parse_dates=True: 년월일까지만 구분해서 인덱스로 사용. 기본값은 False.
+data = pd.read_csv(spx_path, index_col=0, parse_dates= True)
+data
+
+SPX
+1990-02-01	328.79
+1990-02-02	330.92
+1990-02-05	331.85
+1990-02-06	329.66
+1990-02-07	333.75
+...	...
+2011-10-10	1194.89
+2011-10-11	1195.54
+2011-10-12	1207.25
+2011-10-13	1203.66
+2011-10-14	1224.58
+
+data.info()
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 5472 entries, 1990-02-01 to 2011-10-14
+Data columns (total 1 columns):
+ #   Column  Non-Null Count  Dtype  
+---  ------  --------------  -----  
+ 0   SPX     5472 non-null   float64
+dtypes: float64(1)
+memory usage: 85.5 KB
+
+# 위 데이터를 그래프를 나타내자 
+flg = plt.figure
+ax = fig.add_subplot(1,1,1)
+
+#data.plot()
+data.plot(ax = ax)
+```
+
+---
+
