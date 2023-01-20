@@ -1,0 +1,83 @@
+# 모델링 설명
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/efecd3b3-c9f2-4cb3-896a-5ea11536c18b/Untitled.png)
+
+clip 사용 이유 :  item_cnt_month의 값을 0과 20사이로 제한해주는 역할을 한다.
+
+왜 ? 극단적으로 차이나는 이상치가 모델의 예측을 왜곡할 수 있어서 또한 
+
+값을 제한하면  모델의 성능을  개선하고 예측이 정교해지게 만들 수 있다. 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/98c376bb-11d5-429d-8dcf-7405416de073/Untitled.png)
+
+collect : (garbage collector)의 함수 개체를 만들 때 메모리가 할당된 후에 개체가 더 이상 쓰이지 않으면 쓰레기로 간주하고  사용중인 메모리를 해제시킨다. 
+
+하지만 항상 즉시 실행되면 필요할때 못쓰는 단점이 있다 그래서 주기적으로 또는 메모리 사용량이 특정 임계값에 도달하면 실행된다. 
+
+메모리 사용량을 낮게 유지하고 메모리 누수를 방지하는 좋은 방법이다.
+
+## 데이터 분리
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/60877af5-24d5-434f-8a46-2b06ce872315/Untitled.png)
+
+데이터셋과 , 밸리데이션 셋, 테스트 셋으로 구분지어줍니다. 
+
+y는 타겟값 설정 
+
+### XGBRegressor
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fc01a8fd-e297-4cb6-abe0-01c935f68331/Untitled.png)
+
+파라미터를 설정해서 넣어준 모습이다. 
+
+사용한 매개변수에 대한 간략 설명
+
+max_depth : 트리의 최대깊이를 제어 갚이 높으면 모델이 복잡해지지만 과적합 발생이 높습니다.
+
+n_estimators : 트리 수를 제어합니다. 갚이 높으면 모델이 강력해지지만 훈련시간이 늘어납니다.
+
+min_child_weight : 모든 관측치의 최소 가중치 합을 제어합니다. 과적합을 제어하는 데 사용.
+
+colsample_bytree : 트리를 구성할 때 열의 하위표본 비율을 제어합니다.
+
+1.0 값은 모든 열이 사용됨을 의미하고 1.0 미만의 값은 열의 임의 하위 집합이 사용됨을 의미합니다
+
+subsample : 이 매개변수는 교육 인스턴스의 하위 샘플 비율을 제어합니다. 1.0 값은 모든 인스턴스가 사용됨을 의미하고 1.0 미만 값은 임의의 인스턴스 하위 집합이 사용됨을 의미합니다.
+
+learning_rate : 이 매개변수는 과적합을 방지하기 위해 각 부스팅 라운드에서 사용되는 단계 크기 축소를 제어합니다.
+
+eta : 매개변수는 학습률 매개변수와 유사하게 과적합을 방지하기 위해 각 부스팅 라운드에서 사용되는 단계 크기 축소를 제어합니다
+
+XGBoost 의 feature importance (관련성) 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d9d065b5-cf04-44c9-ae0e-f30f0075dea7/Untitled.png)
+
+### LGBMregressor
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3b87eda2-1c9e-4b68-b471-e71d4f7d7931/Untitled.png)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/740623d8-08ce-4ab9-b270-93ff8b15f5d9/Untitled.png)
+
+LightGBM의 feature_importance (바형식)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/513fa175-b9dd-488d-aa68-a59608d8903a/Untitled.png)
+
+모델 선정 이유, 장점과 단점 
+
+XGBboost, LGBM 모델의 장점 : 
+
+- Gradient Boosting을 구현했기 때문에 데이터셋이 많을때 최고의 성능을 달성 할 수 있는 방법이다.
+- 고차원문제에 적합하다.
+- 성능을 최적화하기 위한 미세조정 매개변수가 존재한다 또한 과적합 방지에 도움이 되는 기능이 있다.
+    - 과적합 방지기능에 무엇이 있을까요? 질문이 올 시
+        - ‘reg lambda’, ‘reg_alpha’ 파라미터로 사용가능하고
+        - early_stopping의 조기중지 기능을 이용하기도 한다. ( 검증셋의 성능이 저하되기 시작하면 조기중지 함)
+- 모두 분산컴퓨팅을 사용하여 빠른처리가 가능하다.
+
+단점 
+
+- 많은 양의 리소스가 필요 (메모리)
+
+하이퍼 파라미터 선택 : 그리드서치를 이용하여 파라미터를 찾아줄 수 있습니다.(예시)
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f1eb0c8c-406c-450c-a700-8ea25eaf2b41/Untitled.png)
